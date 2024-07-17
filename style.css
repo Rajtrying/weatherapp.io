@@ -1,0 +1,129 @@
+
+/* General styles */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #6dd5fa, #2980b9);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+header {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+main {
+  width: 90%;
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#location-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #2980b9;
+  border-radius: 5px;
+  outline: none;
+  width: 70%;
+  max-width: 400px;
+  margin-right: 10px;
+}
+
+#search-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#search-btn:hover {
+  background-color: #3498db;
+}
+
+.weather-display {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.weather-display h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.weather-display p {
+  margin: 5px 0;
+  font-size: 18px;
+}
+
+.weather-display img {
+  width: 100px;
+  height: 100px;
+}
+
+.forecast-section {
+  text-align: center;
+}
+
+.forecast-section h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#forecast-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#forecast-list li {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  margin: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  font-size: 16px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+#forecast-list img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
