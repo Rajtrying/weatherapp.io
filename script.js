@@ -1,6 +1,5 @@
 
-
-const apiKey = 'abcca743da1c402e977110009241407';
+const apiKey = '5529ef494c6fe7f80698b62662d0a783';
 
 // Select HTML elements
 const locationInput = document.getElementById('location-input');
@@ -18,39 +17,35 @@ searchBtn.addEventListener('click', async () => {
 	const location = locationInput.value.trim();
 	if (location) {
 		try {
-			const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`);
-			const data = await response.json();
+			// Fetch current weather data
+			const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`);
+			const weatherData = await weatherResponse.json();
 
-			// Update HTML elements
-			locationName.textContent = data.location.name;
-			weatherDescription.textContent = data.current.condition.text;
+			// Update HTML elements with current weather data
+			locationName.textContent = weatherData.name;
+			weatherDescription.textContent = weatherData.weather[0].description;
 
-			// Log icon URL to console
-			const iconUrl = `https:${data.current.condition.icon}`;
-			console.log('Weather Icon URL:', iconUrl);
-
-			// Set weather icon
+			const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;
 			weatherIcon.src = iconUrl;
-			weatherIcon.alt = data.current.condition.text;
+			weatherIcon.alt = weatherData.weather[0].description;
 
-			// Update other weather details
-			temperature.textContent = `Temperature: ${data.current.temp_c}°C`;
-			humidity.textContent = `Humidity: ${data.current.humidity}%`;
-			windSpeed.textContent = `Wind Speed: ${data.current.wind_kph} kph`;
+			temperature.textContent = `Temperature: ${weatherData.main.temp}°C`;
+			humidity.textContent = `Humidity: ${weatherData.main.humidity}%`;
+			windSpeed.textContent = `Wind Speed: ${weatherData.wind.speed} m/s`;
 
 			// Fetch forecast data
-			const forecastResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=5&aqi=no&alerts=no`);
+			const forecastResponse = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}&units=metric`);
 			const forecastData = await forecastResponse.json();
 
 			// Clear forecast list
 			forecastList.innerHTML = '';
 
 			// Add forecast items to list
-			forecastData.forecast.forecastday.forEach((item) => {
-				const date = new Date(item.date);
+			forecastData.list.forEach((item) => {
+				const date = new Date(item.dt * 1000);
 				const day = date.toLocaleDateString('en-US', { weekday: 'long' });
-				const temp = item.day.avgtemp_c;
-				const forecastIcon = `https:${item.day.condition.icon}`;
+				const temp = item.main.temp;
+				const forecastIcon = `https://openweathermap.org/img/wn/${item.weather[0].icon}.png`;
 				const listItem = document.createElement('li');
 				listItem.innerHTML = `<img src="${forecastIcon}" alt="Forecast Icon"> ${day} - ${temp}°C`;
 				forecastList.appendChild(listItem);
@@ -60,4 +55,3 @@ searchBtn.addEventListener('click', async () => {
 		}
 	}
 });
-
