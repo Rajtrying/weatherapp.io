@@ -1,4 +1,3 @@
-
 const apiKey = '5529ef494c6fe7f80698b62662d0a783';
 
 // Select HTML elements
@@ -40,31 +39,32 @@ searchBtn.addEventListener('click', async () => {
 			// Clear forecast list
 			forecastList.innerHTML = '';
 
-			// Process forecast data to get daily forecasts at noon (12:00 PM)
+			// Process forecast data to get daily forecasts
 			const dailyForecasts = {};
 			forecastData.list.forEach((item) => {
 				const date = new Date(item.dt * 1000);
-				const day = date.toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' });
+				const day = date.toISOString().split('T')[0]; // Get the date in YYYY-MM-DD format
 
-				// Choose the forecast closest to noon (12:00 PM)
-				if (!dailyForecasts[day] || Math.abs(date.getHours() - 12) < Math.abs(new Date(dailyForecasts[day].dt * 1000).getHours() - 12)) {
-					dailyForecasts[day] = item;
+				if (!dailyForecasts[day]) {
+					dailyForecasts[day] = [];
 				}
+				dailyForecasts[day].push(item);
 			});
 
 			// Add forecast items to list
-			for (const day in dailyForecasts) {
-				const item = dailyForecasts[day];
-				const date = new Date(item.dt * 1000);
-				const temp = item.main.temp;
-				const forecastIcon = `https://openweathermap.org/img/wn/${item.weather[0].icon}.png`;
+			Object.keys(dailyForecasts).slice(0, 5).forEach(day => {
+				const dayForecasts = dailyForecasts[day];
+				const middayForecast = dayForecasts.find(f => new Date(f.dt * 1000).getHours() === 12) || dayForecasts[0];
+
+				const date = new Date(middayForecast.dt * 1000);
+				const temp = middayForecast.main.temp;
+				const forecastIcon = `https://openweathermap.org/img/wn/${middayForecast.weather[0].icon}.png`;
 				const listItem = document.createElement('li');
 				listItem.innerHTML = `<img src="${forecastIcon}" alt="Forecast Icon"> ${date.toLocaleDateString('en-US', { weekday: 'long' })} - ${temp}°C`;
 				forecastList.appendChild(listItem);
-			}
+			});
 		} catch (error) {
 			console.error('Error fetching weather data:', error);
 		}
 	}
 });
-
