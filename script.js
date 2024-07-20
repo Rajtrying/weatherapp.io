@@ -40,18 +40,31 @@ searchBtn.addEventListener('click', async () => {
 			// Clear forecast list
 			forecastList.innerHTML = '';
 
-			// Add forecast items to list
+			// Process forecast data to get daily forecasts at noon (12:00 PM)
+			const dailyForecasts = {};
 			forecastData.list.forEach((item) => {
 				const date = new Date(item.dt * 1000);
-				const day = date.toLocaleDateString('en-US', { weekday: 'long' });
+				const day = date.toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' });
+
+				// Choose the forecast closest to noon (12:00 PM)
+				if (!dailyForecasts[day] || Math.abs(date.getHours() - 12) < Math.abs(new Date(dailyForecasts[day].dt * 1000).getHours() - 12)) {
+					dailyForecasts[day] = item;
+				}
+			});
+
+			// Add forecast items to list
+			for (const day in dailyForecasts) {
+				const item = dailyForecasts[day];
+				const date = new Date(item.dt * 1000);
 				const temp = item.main.temp;
 				const forecastIcon = `https://openweathermap.org/img/wn/${item.weather[0].icon}.png`;
 				const listItem = document.createElement('li');
-				listItem.innerHTML = `<img src="${forecastIcon}" alt="Forecast Icon"> ${day} - ${temp}°C`;
+				listItem.innerHTML = `<img src="${forecastIcon}" alt="Forecast Icon"> ${date.toLocaleDateString('en-US', { weekday: 'long' })} - ${temp}°C`;
 				forecastList.appendChild(listItem);
-			});
+			}
 		} catch (error) {
 			console.error('Error fetching weather data:', error);
 		}
 	}
 });
+
